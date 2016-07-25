@@ -34,7 +34,7 @@
                     if (typeof scope.onChange === 'function') {
                         scope.onChange({value: newValue});
                     }
-                };
+                }; 
                  
                 /* 
                 *@attr $observe() 
@@ -53,9 +53,9 @@
                 attributes.$observe('max', function(newValue) {
                     scope.max = newValue;
                 });
- 
+                
                 /* 
-                *@func fillStyle() 
+                *@attr fillStyle() 
                 *@desc Updates CSS for .fill .seekBar 
                 */
                 scope.fillStyle = function() {
@@ -63,7 +63,7 @@
                 }; 
                 
                 /* 
-                *@func fillStyle() 
+                *@attr thumbStyle() 
                 *@desc Updates CSS for .thumb .seekBar 
                 */
                 scope.thumbStyle = function() {

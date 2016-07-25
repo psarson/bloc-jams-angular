@@ -44,13 +44,20 @@
                 formats: ['mp3'],
                 preload: true
             }); 
-             
+            
+            
             currentBuzzObject.bind('timeupdate', function() {
                 $rootScope.$apply(function() {
                     SongPlayer.currentTime = currentBuzzObject.getTime();
                 });
-            });
- 
+            }); 
+             
+            currentBuzzObject.bind('volumechange', function() {
+                $rootScope.$apply(function() {
+                    SongPlayer.currentVolume = currentBuzzObject.getVolume();
+                });
+            });  
+            
             SongPlayer.currentSong = song;
          }; 
          
@@ -69,7 +76,11 @@
          * @desc Current playback time (in seconds) of currently playing song
          * @type {Number}
          */
-         SongPlayer.currentTime = null; 
+         SongPlayer.currentTime = null;
+         
+         SongPlayer.currentVolume = null; 
+         
+         SongPlayer.volumeMax = 100;
          
          /**
          * @function setCurrentTime
@@ -80,7 +91,13 @@
              if (currentBuzzObject) {
                  currentBuzzObject.setTime(time);
              }
-         };
+         }; 
+         
+         SongPlayer.setVolume = function(volume) {
+             if (currentBuzzObject) {
+                 currentBuzzObject.setVolume(volume);
+             }
+         }
          
          /**
          * @function play
