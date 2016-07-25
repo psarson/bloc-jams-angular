@@ -1,5 +1,5 @@
 (function() {
-     function SongPlayer(Fixtures) {
+     function SongPlayer($rootScope, Fixtures) {
          var SongPlayer = {}; 
          
          var currentAlbum = Fixtures.getAlbum();
@@ -43,6 +43,12 @@
             currentBuzzObject = new buzz.sound(song.audioUrl, {
                 formats: ['mp3'],
                 preload: true
+            }); 
+             
+            currentBuzzObject.bind('timeupdate', function() {
+                $rootScope.$apply(function() {
+                    SongPlayer.currentTime = currentBuzzObject.getTime();
+                });
             });
  
             SongPlayer.currentSong = song;
@@ -57,7 +63,24 @@
          * @desc Active song object from list of songs
          * @type {Object}
          */
-         SongPlayer.currentSong = null;
+         SongPlayer.currentSong = null; 
+         
+         /**
+         * @desc Current playback time (in seconds) of currently playing song
+         * @type {Number}
+         */
+         SongPlayer.currentTime = null; 
+         
+         /**
+         * @function setCurrentTime
+         * @desc Set current time (in seconds) of currently playing song
+         * @param {Number} time
+         */
+         SongPlayer.setCurrentTime = function(time) {
+             if (currentBuzzObject) {
+                 currentBuzzObject.setTime(time);
+             }
+         };
          
          /**
          * @function play
@@ -77,11 +100,11 @@
             }
          }; 
       
-        /**
-         * @function pause
-         * @desc Pauses current song.
-         * @param {Object} song
-         */  
+        /*
+        * @function pause
+        * @desc Pauses current song.
+        * @param {Object} song
+        */  
         SongPlayer.pause = function(song) {
             song = song || SongPlayer.currentSong;
             currentBuzzObject.pause();
@@ -92,7 +115,7 @@
         *@function .previous
         *@desc Plays previous song in songs index
         */
-         SongPlayer.previous = function() {
+        SongPlayer.previous = function() {
             var currentSongIndex = getSongIndex(SongPlayer.currentSong);
             currentSongIndex--; 
         
@@ -129,5 +152,5 @@
 
     angular
          .module('blocJams')
-         .factory('SongPlayer', SongPlayer);
+         .factory('SongPlayer', ['$rootScope', 'Fixtures', SongPlayer]);
  })();
